@@ -135,9 +135,17 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        // acme_blog_homepage
-        if (0 === strpos($pathinfo, '/hello') && preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'acme_blog_homepage')), array (  '_controller' => 'Acme\\BlogBundle\\Controller\\DefaultController::indexAction',));
+        if (0 === strpos($pathinfo, '/hello')) {
+            // acme_store_homepage
+            if (preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'acme_store_homepage')), array (  '_controller' => 'Acme\\StoreBundle\\Controller\\DefaultController::indexAction',));
+            }
+
+            // acme_blog_homepage
+            if (preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'acme_blog_homepage')), array (  '_controller' => 'Acme\\BlogBundle\\Controller\\DefaultController::indexAction',));
+            }
+
         }
 
         if (0 === strpos($pathinfo, '/blog')) {
@@ -154,7 +162,7 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
 
         // acme_hello_homepage
-        if (0 === strpos($pathinfo, '/hello') && preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
+        if (0 === strpos($pathinfo, '/admin/hello') && preg_match('#^/admin/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'acme_hello_homepage')), array (  '_controller' => 'Acme\\HelloBundle\\Controller\\HelloController::indexAction',));
         }
 

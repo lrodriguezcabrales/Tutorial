@@ -12,8 +12,9 @@ class __TwigTemplate_5ff14f6c8587bcdc6bff8eaa54ada90449706703ef5d585c8e906988d19
         $this->blocks = array(
             'title' => array($this, 'block_title'),
             'stylesheets' => array($this, 'block_stylesheets'),
-            'body' => array($this, 'block_body'),
             'javascripts' => array($this, 'block_javascripts'),
+            'sidebar' => array($this, 'block_sidebar'),
+            'body' => array($this, 'block_body'),
         );
     }
 
@@ -28,23 +29,35 @@ class __TwigTemplate_5ff14f6c8587bcdc6bff8eaa54ada90449706703ef5d585c8e906988d19
         // line 5
         $this->displayBlock('title', $context, $blocks);
         echo "</title>
-        ";
+        <link rel=\"icon\" type=\"image/x-icon\" href=\"";
         // line 6
-        $this->displayBlock('stylesheets', $context, $blocks);
-        // line 7
-        echo "        <link rel=\"icon\" type=\"image/x-icon\" href=\"";
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("favicon.ico"), "html", null, true);
         echo "\" />
-    </head>
-    <body>
         ";
+        // line 7
+        $this->displayBlock('stylesheets', $context, $blocks);
         // line 10
-        $this->displayBlock('body', $context, $blocks);
+        echo "    \t
+    \t";
         // line 11
-        echo "        ";
         $this->displayBlock('javascripts', $context, $blocks);
-        // line 12
-        echo "    </body>
+        // line 14
+        echo "    </head>
+    <body>
+        <div id=\"sidebar\">
+            ";
+        // line 17
+        $this->displayBlock('sidebar', $context, $blocks);
+        // line 23
+        echo "        </div>
+ 
+        <div id=\"contenido\">
+            ";
+        // line 26
+        $this->displayBlock('body', $context, $blocks);
+        // line 27
+        echo "        </div>
+    </body>
 </html>
 ";
     }
@@ -52,21 +65,42 @@ class __TwigTemplate_5ff14f6c8587bcdc6bff8eaa54ada90449706703ef5d585c8e906988d19
     // line 5
     public function block_title($context, array $blocks = array())
     {
-        echo "Welcome!";
+        echo "Test Aplication!";
     }
 
-    // line 6
+    // line 7
     public function block_stylesheets($context, array $blocks = array())
     {
-    }
-
-    // line 10
-    public function block_body($context, array $blocks = array())
-    {
+        // line 8
+        echo "        <link href=\"";
+        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("../app/css/blog.css"), "html", null, true);
+        echo "\" type=\"text/css\" rel=\"stylesheet\" />
+    \t";
     }
 
     // line 11
     public function block_javascripts($context, array $blocks = array())
+    {
+        // line 12
+        echo "        <script src=\"";
+        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("/js/main.js"), "html", null, true);
+        echo "\" type=\"text/javascript\"></script>
+    \t";
+    }
+
+    // line 17
+    public function block_sidebar($context, array $blocks = array())
+    {
+        // line 18
+        echo "            <ul>
+                <li><a href=\"/\">Home</a></li>
+                <li><a href=\"/blog\">Blog</a></li>
+            </ul>
+            ";
+    }
+
+    // line 26
+    public function block_body($context, array $blocks = array())
     {
     }
 
@@ -82,6 +116,6 @@ class __TwigTemplate_5ff14f6c8587bcdc6bff8eaa54ada90449706703ef5d585c8e906988d19
 
     public function getDebugInfo()
     {
-        return array (  69 => 11,  64 => 10,  59 => 6,  53 => 5,  47 => 12,  44 => 11,  42 => 10,  35 => 7,  33 => 6,  29 => 5,  23 => 1,  31 => 4,  28 => 3,);
+        return array (  103 => 26,  95 => 18,  92 => 17,  85 => 12,  82 => 11,  75 => 8,  72 => 7,  66 => 5,  59 => 27,  57 => 26,  52 => 23,  50 => 17,  45 => 14,  43 => 11,  40 => 10,  38 => 7,  34 => 6,  30 => 5,  24 => 1,);
     }
 }

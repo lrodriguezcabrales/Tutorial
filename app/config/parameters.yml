@@ -2,7 +2,7 @@ parameters:
     database_driver: pdo_pgsql
     database_host: 127.0.0.1
     database_port: '5433'
-    database_name: symfony
+    database_name: symfony2
     database_user: postgres
     database_password: postgres
     mailer_transport: smtp

@@ -590,7 +590,7 @@ class appDevDebugProjectContainer extends Container
         $b = new \Doctrine\DBAL\Configuration();
         $b->setSQLLogger($a);
 
-        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('dbname' => 'symfony', 'host' => '127.0.0.1', 'port' => '5433', 'user' => 'postgres', 'password' => 'postgres', 'charset' => 'UTF8', 'driver' => 'pdo_pgsql', 'driverOptions' => array()), $b, new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this), array());
+        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('dbname' => 'symfony2', 'host' => '127.0.0.1', 'port' => '5433', 'user' => 'postgres', 'password' => 'postgres', 'charset' => 'UTF8', 'driver' => 'pdo_pgsql', 'driverOptions' => array()), $b, new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this), array());
     }
 
     /**
@@ -612,20 +612,26 @@ class appDevDebugProjectContainer extends Container
         $c = new \Doctrine\Common\Cache\ArrayCache();
         $c->setNamespace('sf2orm_default_d6b38ea785114a4654a528736d4689a9855fe17b24b4f1642d5162eaca62286a');
 
-        $d = new \Doctrine\ORM\Configuration();
-        $d->setEntityNamespaces(array());
-        $d->setMetadataCacheImpl($a);
-        $d->setQueryCacheImpl($b);
-        $d->setResultCacheImpl($c);
-        $d->setMetadataDriverImpl(new \Doctrine\ORM\Mapping\Driver\DriverChain());
-        $d->setProxyDir('/var/www/Symfony2/app/cache/dev/doctrine/orm/Proxies');
-        $d->setProxyNamespace('Proxies');
-        $d->setAutoGenerateProxyClasses(true);
-        $d->setClassMetadataFactoryName('Doctrine\\ORM\\Mapping\\ClassMetadataFactory');
-        $d->setDefaultRepositoryClassName('Doctrine\\ORM\\EntityRepository');
-        $d->setNamingStrategy(new \Doctrine\ORM\Mapping\DefaultNamingStrategy());
+        $d = new \Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver(array('/var/www/Symfony2/src/Acme/StoreBundle/Resources/config/doctrine' => 'Acme\\StoreBundle\\Entity'));
+        $d->setGlobalBasename('mapping');
 
-        $this->services['doctrine.orm.default_entity_manager'] = $instance = call_user_func(array('Doctrine\\ORM\\EntityManager', 'create'), $this->get('doctrine.dbal.default_connection'), $d);
+        $e = new \Doctrine\ORM\Mapping\Driver\DriverChain();
+        $e->addDriver($d, 'Acme\\StoreBundle\\Entity');
+
+        $f = new \Doctrine\ORM\Configuration();
+        $f->setEntityNamespaces(array('AcmeStoreBundle' => 'Acme\\StoreBundle\\Entity'));
+        $f->setMetadataCacheImpl($a);
+        $f->setQueryCacheImpl($b);
+        $f->setResultCacheImpl($c);
+        $f->setMetadataDriverImpl($e);
+        $f->setProxyDir('/var/www/Symfony2/app/cache/dev/doctrine/orm/Proxies');
+        $f->setProxyNamespace('Proxies');
+        $f->setAutoGenerateProxyClasses(true);
+        $f->setClassMetadataFactoryName('Doctrine\\ORM\\Mapping\\ClassMetadataFactory');
+        $f->setDefaultRepositoryClassName('Doctrine\\ORM\\EntityRepository');
+        $f->setNamingStrategy(new \Doctrine\ORM\Mapping\DefaultNamingStrategy());
+
+        $this->services['doctrine.orm.default_entity_manager'] = $instance = call_user_func(array('Doctrine\\ORM\\EntityManager', 'create'), $this->get('doctrine.dbal.default_connection'), $f);
 
         $this->get('doctrine.orm.default_manager_configurator')->configure($instance);
 
@@ -2947,6 +2953,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addPath('/var/www/Symfony2/vendor/doctrine/doctrine-bundle/Doctrine/Bundle/DoctrineBundle/Resources/views', 'Doctrine');
         $instance->addPath('/var/www/Symfony2/src/Acme/HelloBundle/Resources/views', 'AcmeHello');
         $instance->addPath('/var/www/Symfony2/src/Acme/BlogBundle/Resources/views', 'AcmeBlog');
+        $instance->addPath('/var/www/Symfony2/src/Acme/StoreBundle/Resources/views', 'AcmeStore');
         $instance->addPath('/var/www/Symfony2/src/Acme/DemoBundle/Resources/views', 'AcmeDemo');
         $instance->addPath('/var/www/Symfony2/vendor/symfony/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views', 'WebProfiler');
         $instance->addPath('/var/www/Symfony2/vendor/sensio/distribution-bundle/Sensio/Bundle/DistributionBundle/Resources/views', 'SensioDistribution');
@@ -3433,6 +3440,7 @@ class appDevDebugProjectContainer extends Container
                 'SensioFrameworkExtraBundle' => 'Sensio\\Bundle\\FrameworkExtraBundle\\SensioFrameworkExtraBundle',
                 'AcmeHelloBundle' => 'Acme\\HelloBundle\\AcmeHelloBundle',
                 'AcmeBlogBundle' => 'Acme\\BlogBundle\\AcmeBlogBundle',
+                'AcmeStoreBundle' => 'Acme\\StoreBundle\\AcmeStoreBundle',
                 'AcmeDemoBundle' => 'Acme\\DemoBundle\\AcmeDemoBundle',
                 'WebProfilerBundle' => 'Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle',
                 'SensioDistributionBundle' => 'Sensio\\Bundle\\DistributionBundle\\SensioDistributionBundle',
@@ -3443,7 +3451,7 @@ class appDevDebugProjectContainer extends Container
             'database_driver' => 'pdo_pgsql',
             'database_host' => '127.0.0.1',
             'database_port' => '5433',
-            'database_name' => 'symfony',
+            'database_name' => 'symfony2',
             'database_user' => 'postgres',
             'database_password' => 'postgres',
             'mailer_transport' => 'smtp',
